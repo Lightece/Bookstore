@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import './index.css';
+import { Layout, Menu, theme} from 'antd';
+import CartView from "./views/CartView";
+import BookDetailView from "./views/BookDetailView";
+import HomeView from "./views/HomeView";
+const { Header, Footer } = Layout;
+const nav_items = ["Home","Profile","Cart"];
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+const App = () => {
+
+    return <Layout className="layout">
+        <Header>
+            <div className="logo" />
+            <Menu
+                flex="right"
+                theme="light"
+                mode="horizontal"
+                float="right"
+                defaultSelectedKeys={['2']}
+                items={new Array(3).fill(null).map((_, index) => {
+                    return {
+                        index,
+                        label: nav_items[index],
+                    };
+                })}
+            />
+        </Header>
+        <HomeView/>
+        <CartView></CartView>
+        <BookDetailView/>
+        <Footer
+            style={{
+                textAlign: 'center',
+            }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
-
+            Ant Design ©2023 Created by Ant UED
+        </Footer>
+    </Layout>;
+};
 export default App;
