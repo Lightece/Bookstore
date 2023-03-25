@@ -1,0 +1,11 @@
+.CartList{
+    clear: right;
+    margin: 0 auto;
+    width: 90%;
+}
+
+.AllCheck{
+    float: right;
+    margin-right: 50px;
+    height:40px;
+}

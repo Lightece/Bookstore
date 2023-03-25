@@ -1,40 +1,62 @@
-import React from 'react';
-import './index.css';
-import { Layout, Menu, theme} from 'antd';
-import CartView from "./views/CartView";
-import BookDetailView from "./views/BookDetailView";
+import React, {useState} from 'react';
+import './css/App.css';
+import { Layout, Menu} from 'antd';
+import {Route, Routes, Router, Link} from "react-router-dom";
+import MyRouter from "./Router";
 import HomeView from "./views/HomeView";
+import CartView from "./views/CartView";
+import ProfileView from "./views/ProfileView";
+import BookDetailView from "./views/BookDetailView";
+import books from "./data/books";
+
 const { Header, Footer } = Layout;
-const nav_items = ["Home","Profile","Cart"];
+
+const nav_items = [
+    {
+        key: 'home',
+        label: <a href={"/"}>Home</a>,
+
+    },
+    {
+        key: "profile",
+        label: <a href={"/profile"}>Profile</a>,
+    },
+    {
+        key: "cart",
+        label: <a href={"/cart"}>Cart</a>,
+    }
+];
+
 
 const App = () => {
+    const [current, setCurrent] = useState('home');
+    const onClick = (e) => {
+        console.log('click ', e);
+        setCurrent(e.key);
+    };
 
     return <Layout className="layout">
-        <Header>
+        <Header left="0">
             <div className="logo" />
             <Menu
-                flex="right"
+                onClick={onClick}
                 theme="light"
                 mode="horizontal"
                 float="right"
-                defaultSelectedKeys={['2']}
-                items={new Array(3).fill(null).map((_, index) => {
-                    return {
-                        index,
-                        label: nav_items[index],
-                    };
-                })}
+                items={nav_items}
             />
         </Header>
-        <HomeView/>
-        <CartView></CartView>
-        <BookDetailView/>
+        <div style={{height: '80px',}}>
+            你发现了彩蛋！
+        </div>
+        <MyRouter/>
+
         <Footer
             style={{
                 textAlign: 'center',
             }}
         >
-            Ant Design ©2023 Created by Ant UED
+            闲书 · 阅闲悦自由 ©2023 Created by ZYH
         </Footer>
     </Layout>;
 };
