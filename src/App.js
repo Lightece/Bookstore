@@ -1,33 +1,35 @@
 import React, {useState} from 'react';
 import './css/App.css';
-import { Layout, Menu} from 'antd';
-import {Route, Routes, Router, Link} from "react-router-dom";
+import {Button, Layout, Menu} from 'antd';
 import MyRouter from "./Router";
-import HomeView from "./views/HomeView";
-import CartView from "./views/CartView";
-import ProfileView from "./views/ProfileView";
-import BookDetailView from "./views/BookDetailView";
-import books from "./data/books";
 
 const { Header, Footer } = Layout;
 
 const nav_items = [
     {
         key: 'home',
-        label: <a href={"/"}>Home</a>,
+        label: <a href={"/"}>首页</a>,
 
     },
     {
         key: "profile",
-        label: <a href={"/profile"}>Profile</a>,
+        label: <a href={"/profile"}>账户</a>,
     },
     {
         key: "cart",
-        label: <a href={"/cart"}>Cart</a>,
+        label: <a href={"/cart"}>购物车</a>,
+    },
+    {
+        key: "order",
+        label: <a href={"/orders"}>订单</a>,
     }
 ];
 
-
+const logout= () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    window.location.href = "/";
+}
 const App = () => {
     const [current, setCurrent] = useState('home');
     const onClick = (e) => {
@@ -35,9 +37,15 @@ const App = () => {
         setCurrent(e.key);
     };
 
+
     return <Layout className="layout">
         <Header left="0">
             <div className="logo" />
+            <div style={{ float: 'right' }}>
+                <Button type="primary" size="large" onClick={logout}>
+                    退出
+                </Button>
+            </div>
             <Menu
                 onClick={onClick}
                 theme="light"
@@ -45,18 +53,15 @@ const App = () => {
                 float="right"
                 items={nav_items}
             />
-        </Header>
-        <div style={{height: '80px',}}>
-            你发现了彩蛋！
-        </div>
-        <MyRouter/>
 
+        </Header>
+        <MyRouter/>
         <Footer
             style={{
                 textAlign: 'center',
             }}
         >
-            闲书 · 阅闲悦自由 ©2023 Created by ZYH
+            闲书·阅闲悦自由 ©2023 Created by zyh
         </Footer>
     </Layout>;
 };

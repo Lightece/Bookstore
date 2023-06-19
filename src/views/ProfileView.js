@@ -1,12 +1,44 @@
-import React from 'react';
-import {Avatar, Breadcrumb, Col, Layout, Row, theme} from 'antd';
-import {UserOutlined, SettingOutlined} from "@ant-design/icons";
+import React, {useEffect} from 'react';
+import { Breadcrumb, Col, Layout, Row, theme} from 'antd';
+import {getUserInfo} from "../services/UserService";
+import { SettingOutlined} from "@ant-design/icons";
+import "../css/ProfileView.css";
+
 const { Content } = Layout;
+
+const UserDisplay = () => {
+    const [userInfo, setUserInfo] = React.useState({});
+    useEffect(() => {
+        getUserInfo().then((res)=>{
+                setUserInfo(res.data);
+            }
+        );
+    },[]);
+
+    if (userInfo != null){
+        return (<Row>
+            <Col span={6} offset={1}>
+                <img src={userInfo.avatar} alt="user" className="avatar"/>
+            </Col>
+            <Col span={6}>
+                <h1>昵称: {userInfo.nickname}</h1>
+                <h1>电话: {userInfo.tel}</h1>
+            </Col>
+            <Col span={8}>
+                <h1>邮箱: {userInfo.email}</h1>
+                <h1>地址: {userInfo.address}</h1>
+            </Col>
+
+        </Row>);
+    }
+}
+
 
 const ProfileView = () => {
     const {
         token: { colorBgContainer},
     } = theme.useToken();
+
     return (
         <Content
             style={{
@@ -35,24 +67,7 @@ const ProfileView = () => {
                 }}
             >
                 <div>
-                    <Row>
-
-                        <Col span={6} offset={1}>
-                            <Avatar size={120} icon="我" />
-                        </Col>
-                        <Col span={6}>
-                            <h1>Username：Sleep</h1>
-                            <h1>Tel: 133-3333-3333</h1>
-                        </Col>
-                        <Col span={6}>
-                            <h1>Slogan: While(1)Sleep();</h1>
-                            <h1>Address: 东川路800号</h1>
-                        </Col>
-                        <Col span={4}>
-                            <SettingOutlined key="setting" size={60} />
-                        </Col>
-
-                    </Row>
+                    <UserDisplay/>
                 </div>
             </div>
         </Content>

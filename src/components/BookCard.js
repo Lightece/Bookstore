@@ -1,26 +1,35 @@
-
+import React,{useEffect} from 'react';
 import { Card } from 'antd';
+import {getBookById} from "../services/BookService";
 const { Meta } = Card;
 
-const BookCard = ({book}) => {
 
-    return(
-        <a href={"/" + book.bookName}>
-            <Card
-                hoverable
-                style={{
-                    width: 250,
-                    margin: 25,
-                }}
-                cover={<img alt="example" src={require("../assets/"+book.bookName+".jpg")} />}
-            >
-                <Meta
-                    title={book.title}
-                    description={"Price: " + book.price}
-                />
+const BookCard =({book})=> {
+    // const [book, setBook] = React.useState({});
+    // useEffect(() => {
+    //     getBookById(bookid).then((res)=>{
+    //         setBook(res.data);
+    //         }
+    //     );
+    // },[]);
 
-            </Card>
-        </a>
-    );
+        return (
+            <a href={"/books/" + book.bookid}>
+                <Card
+                    hoverable
+                    style={{
+                        width: 250,
+                        margin: 25,
+                    }}
+                    cover={book.cover!=null && book.cover!=""?(<img alt="example" src={book.cover}/>):
+                        (<img alt="example" src="http://myimg.lightece.top/bookstore/assets/cover_undefined.png"/>)}
+                >
+                    <Meta
+                        title={book.title}
+                        description={"单价: ￥" + book.price}
+                    />
+                </Card>
+            </a>
+        );
 }
 export default BookCard;

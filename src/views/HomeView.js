@@ -1,8 +1,8 @@
-import React from 'react';
-import '../index.css';
-import {Breadcrumb, Col, Layout, Row, theme, Carousel} from 'antd';
-import books from "../data/books";
+import React, {useEffect} from 'react';
+import '../css/HomeView.css';
+import {Breadcrumb, Col, Layout, Row, theme, Carousel, List} from 'antd';
 import BookCard from "../components/BookCard";
+import {getBookList} from "../services/BookService";
 const { Content } = Layout;
 
 
@@ -10,23 +10,27 @@ const HomeView = () => {
     const {
         token: { colorBgContainer},
     } = theme.useToken();
+    const [books, setBooks] = React.useState([]);
+    useEffect(() => {
+        getBookList().then((res)=>{
+                setBooks(res.data);
+                console.log(res.data);
+            }
+        );
+    },[]);
     return (
-        <Content
-            style={{
-                padding: '0 50px',
-            }}
-        >
+        <Content className="content-container">
             <Breadcrumb
                 style={{
                     margin: '16px 0',
                 }}
                 items={[
                     {
-                        title: 'Home',
+                        title: '首页',
                         href: '/',
                     },
                     {
-                        title: 'Books',
+                        title: '书籍列表',
                         href: '/',
                     },
                 ]}
@@ -63,23 +67,28 @@ const HomeView = () => {
                         />
                     </div>
                 </Carousel>
-                <Row>
-                    <Col span={6}>
-                        <BookCard book={books[1]}/>
-                        <BookCard book={books[4]}/>
-                    </Col>
-                    <Col span={6}>
-                        <BookCard book={books[2]}/>
-                        <BookCard book={books[5]}/>
-                    </Col>
-                    <Col span={6}>
-                        <BookCard book={books[3]}/>
-                    </Col>
-                    <Col span={6}>
-                        <BookCard book={books[0]}/>
-                    </Col>
-
-                </Row>
+                <List
+                    dataSource={books}
+                    grid={{gutter: 16, column:4}}
+                    renderItem={(item)=>(
+                        <List.Item>
+                            <BookCard book={item}/>
+                        </List.Item>
+                    )}/>
+                {/*<Row>*/}
+                {/*    <Col span={6}>*/}
+                {/*        <BookCard bookid={1}/>*/}
+                {/*    </Col>*/}
+                {/*    <Col span={6}>*/}
+                {/*        <BookCard bookid={2}/>*/}
+                {/*    </Col>*/}
+                {/*    <Col span={6}>*/}
+                {/*        <BookCard bookid={3}/>*/}
+                {/*    </Col>*/}
+                {/*    <Col span={6}>*/}
+                {/*        <BookCard bookid={4}/>*/}
+                {/*    </Col>*/}
+                {/*</Row>*/}
             </div>
         </Content>
     );

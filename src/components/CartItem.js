@@ -6,7 +6,7 @@ import '../css/OrderCard.css';
 const onChange = (e) => {
     console.log(`checked = ${e.target.checked}`);
 };
-const OrderCard = ({book}) => (
+const CartItem = ({bookid}) => (
 
         <Card
             hoverable
@@ -19,7 +19,7 @@ const OrderCard = ({book}) => (
                 <Col span="5" offset="1">
                     <img
                         alt=""
-                        src={require("../assets/"+book.bookName+".jpg")}
+                        src={"http://myimg.lightece.top/bookstore/assets/book"+toString(book.id)+".jpg"}
                         width={100}
                     />
                 </Col>
@@ -40,4 +40,4 @@ const OrderCard = ({book}) => (
             </Row>
         </Card>
 );
-export default OrderCard;
+export default CartItem;
