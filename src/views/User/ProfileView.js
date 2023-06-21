@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react';
 import { Breadcrumb, Col, Layout, Row, theme} from 'antd';
-import {getUserInfo} from "../services/UserService";
+import {getUserInfo} from "../../services/UserService";
 import { SettingOutlined} from "@ant-design/icons";
-import "../css/ProfileView.css";
+import "../../css/ProfileView.css";
 
 const { Content } = Layout;
 

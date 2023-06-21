@@ -1,14 +1,18 @@
 import React from 'react';
 import {Breadcrumb,  Layout,  theme} from 'antd';
-import CartList from "../components/CartList";
-import "../css/CartView.css";
+import OrderList from "../../components/OrderList";
+import "../../css/CartView.css";
 const { Content } = Layout;
-const CartView = () => {
+const OrderView = () => {
     const {
         token: { colorBgContainer},
     } = theme.useToken();
     return (
-        <Content className="content-container">
+        <Content
+            style={{
+                padding: '0 50px',
+            }}
+        >
             <Breadcrumb
                 style={{
                     margin: '16px 0',
@@ -19,8 +23,8 @@ const CartView = () => {
                         href: '/',
                     },
                     {
-                        title: '购物车',
-                        href: '/cart',
+                        title: '订单',
+                        href: '/orders',
                     },
                 ]}
             />
@@ -32,10 +36,10 @@ const CartView = () => {
                     width: 1200,
                 }}
             >
-                <h1>购物车</h1>
-                <CartList/>
+                <h1>我的订单</h1>
+                <OrderList/>
             </div>
         </Content>
     )
 }
-export default CartView;
+export default OrderView;

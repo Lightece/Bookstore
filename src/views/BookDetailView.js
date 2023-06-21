@@ -55,11 +55,11 @@ const BookDetailView = () => {
                 />
                 <div
                     className="site-layout-content"
-                    style={{
-                        background: colorBgContainer,
-                    }}
+                    // style={{
+                    //     background: colorBgContainer,
+                    // }}
                 >
-                    <div>
+                    <div style={{textShadow:" 2px 2px 4px #555555"}}>
                         <Row align="top">
                             <Col span={5} offset={3}>
                                 {book.cover!=null && book.cover!=""?(<img alt="example" src={book.cover} width="200px"/>):

@@ -124,8 +124,8 @@ const CartList = () =>{
     const buyNow= async()=>{
         if(await buy(items, receiver,phone, address)){
             // console.log("buy success");
-            messageApi.success("购买成功！");
             window.location.reload();
+            messageApi.success("购买成功！");
             setItems([]);
             setConfirm("是否确认购买以下书籍：\n");
             setSelectedRowKeys([]);

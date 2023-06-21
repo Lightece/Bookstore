@@ -14,7 +14,25 @@ async function getBookById(id) {
 }
 
 async function getBookList() {
+    const userid = localStorage.getItem("userid");
+    const token = localStorage.getItem("token");
     return await fetch("http://localhost:8080/getBookList", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({userid,token}),
+    })
+        .then ((data) => {
+            return data.json();
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+}
+
+async function getValidBooks(searchType = "unfiltered", searchValue = "") {
+    return await fetch(url+"/getValidBooks?type="+searchType+"&value="+searchValue, {
         method: "GET",
     })
         .then ((data) => {
@@ -37,13 +55,13 @@ async function updateBook(book, userid, token) {
     });
 }
 
-async function deleteBook(bookid, userid, token) {
-    return await fetch("http://localhost:8080/deleteBook", {
+async function setBookStatus(bookid, userid, token, status) {
+    return await fetch("http://localhost:8080/setBookStatus", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({userid, token, bookid}),
+        body: JSON.stringify({userid, token, bookid, status}),
     }).then((data) => {
         // alert(JSON.stringify(userid, token, bookid.bookid));
         return data.json();
@@ -63,4 +81,4 @@ async function addBook(book, userid, token) {
     });
 }
 
-export {getBookById, getBookList, updateBook, deleteBook, addBook};
+export {getBookById, getBookList,getValidBooks, updateBook, setBookStatus, addBook};

@@ -1,5 +1,6 @@
 import React, { useState} from 'react';
 import { login} from "../services/UserService";
+import {message} from "antd";
 import "../css/LoginView.css";
 
 const LoginView = ({ onLogin }) => {
@@ -10,19 +11,25 @@ const LoginView = ({ onLogin }) => {
         e.preventDefault();
         const res = await login(userid, password);
 
-        if (res.data!=null) {
+        if (res.ok) {
             const token = res.data.token;
             localStorage.setItem('token', token);
             localStorage.setItem('userid', userid);
             onLogin(userid);
         } else {
-            alert('Invalid username or password');
+            message.error(res.message);
         }
     };
 
     return (
+        <div>
+            <div style={{display:"flex"}}>
+                {/*<span className="site-title">闲   书</span>*/}
+                <img src="http://myimg.lightece.top/bookstore/assets/logo.png" alt="logo" style={{margin:"0px auto",width:"300px"}}/>
+            </div>
+
+
         <div className="login-card">
-            <h2>Login</h2>
             <form className="login-form" onSubmit={handleSubmit}>
                 <input
                     type="text"
@@ -36,8 +43,9 @@ const LoginView = ({ onLogin }) => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                <button type="submit">Submit</button>
+                <button type="submit">登录</button>
             </form>
+        </div>
         </div>
     );
 };

@@ -33,4 +33,23 @@ async function submitOrder({order}){
             console.log(error);
         })
 }
-export {getOrders, submitOrder}
+
+async function getOrderList(){
+    const userid = localStorage.getItem("userid");
+    const token = localStorage.getItem('token');
+    const url = "http://localhost:8080/getAllOrders";
+    return await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({userid, token})
+    })
+        .then ((data) => {
+            return data.json();
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+}
+export {getOrders, submitOrder, getOrderList}

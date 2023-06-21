@@ -32,7 +32,26 @@ async function checkUserState() {
             return response.json();
         })
         .then(data => {
-            // 返回用户信息
+            if(data.ok)return true;
+            else return false;
+        });
+}async function checkAdmin() {
+    const token = localStorage.getItem('token');
+    const userid = localStorage.getItem('userid');
+    const url = "http://localhost:8080/checkAdmin";
+    if (!token) return Promise.reject('No token found');
+    return await fetch(url, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({userid, token})
+    })
+        .then(response => {
+            if (!response.ok) throw new Error('User is not Admin!');
+            return response.json();
+        })
+        .then(data => {
             if(data.ok)return true;
             else return false;
         });
@@ -55,5 +74,39 @@ async function getUserInfo() {
         });
 }
 
+async function setUserStatus(userid, status) {
+    const token = localStorage.getItem('token');
+    const adminid = localStorage.getItem('userid');
+    const url = "http://localhost:8080/setUserStatus";
+    if (!token) return Promise.reject('No token found');
+    return await fetch(url, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({adminid, token, userid, status})
+    })
+        .then(response => {
+            return response.json();
+        });
+}
 
-export {  login, checkUserState, getUserInfo };
+async function getUserList(type) {
+    const token = localStorage.getItem('token');
+    const userid = localStorage.getItem('userid');
+    const url = "http://localhost:8080/getUserList";
+    if (!token) return Promise.reject('No token found');
+    return await fetch(url, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({userid, token, type})
+    })
+        .then(response => {
+            return response.json();
+        });
+}
+
+
+export {  login, checkUserState, getUserInfo, checkAdmin, setUserStatus, getUserList };
