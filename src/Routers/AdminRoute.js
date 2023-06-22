@@ -4,6 +4,7 @@ import AdminBooksView from "../views/Admin/AdminBooksView";
 import AdminUsersView from "../views/Admin/AdminUsersView";
 import AdminOrdersView from "../views/Admin/AdminOrdersView";
 import { checkAdmin } from "../services/UserService";
+import AdminStatisticsView from "../views/Admin/AdminStatisticView";
 
 const AdminRoute = () => {
     const navigate = useNavigate();
@@ -32,6 +33,7 @@ const AdminRoute = () => {
             <Route path="/books" element={<AdminBooksView />} />
             <Route path="/users" element={<AdminUsersView />} />
             <Route path="/orders" element={<AdminOrdersView />}/>
+            <Route path="/statistics" element={<AdminStatisticsView />}/>
         </Routes>
     );
 }

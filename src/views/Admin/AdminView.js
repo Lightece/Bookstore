@@ -1,4 +1,4 @@
-import { BookOutlined, ShoppingOutlined, UserOutlined } from '@ant-design/icons';
+import { BookOutlined, ShoppingOutlined, UserOutlined, PieChartOutlined } from '@ant-design/icons';
 import {Breadcrumb, Button, Layout, Menu, theme} from 'antd';
 import React, { useState } from 'react';
 import AdminRoute from "../../Routers/AdminRoute";
@@ -20,6 +20,10 @@ const nav_items = [
         key: 'orders',
         label: <a href="/admin/orders"><ShoppingOutlined />订单管理</a>
     },
+    {
+        key: 'statistics',
+        label: <a href="/admin/statistics"><PieChartOutlined />统计数据</a>
+    }
 ];
 
 const AdminView = () => {

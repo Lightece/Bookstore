@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import '../css/HomeView.css';
 import {Breadcrumb, Col, Layout, Row, theme, Carousel, List} from 'antd';
-import {getBookList, getValidBooks} from "../services/BookService";
+import { getValidBooks} from "../services/BookService";
 import BookList from "../components/BookList";
 const { Content } = Layout;
 

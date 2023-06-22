@@ -1,6 +1,10 @@
 import React, {useEffect, useState} from 'react'
-import {Table} from 'antd';
-import {getOrders} from "../services/OrderService";
+import {Button, Input, Table, DatePicker,} from 'antd';
+import {getOrderList} from "../services/OrderService";
+import {SearchOutlined} from "@ant-design/icons";
+import dayjs from "dayjs";
+
+const { RangePicker } = DatePicker;
 
 const columns = [
     {
@@ -59,12 +63,14 @@ const subcolumns = [
 ];
 
 const OrderList= () => {
-    const [orders, setOrders] = useState([]);
     const [expandedRows, setExpandedRows] = useState([]);
+    const [orderList, setOrderList] = useState([]);
+    const [keyword, setKeyword] = useState("");
+    const [dateRange, setDateRange] = useState([]);
     useEffect(() => {
-        getOrders().then((res)=>{
+        getOrderList(false,"", "","" ).then((res)=>{
                 console.log(res);
-                setOrders(res.data);
+                setOrderList(res.data);
             }
         );
     },[]);
@@ -77,24 +83,63 @@ const OrderList= () => {
             }
         });
     };
+
+    const onSearch = async () => {
+        if(dateRange.length === 0){
+            getOrderList(false, keyword, "", "").then((res) => {
+                setOrderList(res.data);
+            });
+        }
+        getOrderList(false, keyword, dateRange[0],dateRange[1]).then((res) => {
+            setOrderList(res.data);
+        });
+    };
+    const onDateChange = (value) => {
+        if(value===null) {
+            setDateRange([]);
+        }
+        else setDateRange(value.map((date) => dayjs(date).format("YYYY-MM-DD")));
+    }
+
+    const handleChange = (e) => {
+        setKeyword(e.target.value);
+        // console.log(keyword);
+    };
+
     return (
-        <Table
-            dataSource={orders}
-            columns={columns}
-            rowKey="orderid"
-            expandable={{
-                expandedRowRender:(record)=>(
-                    <Table
-                        dataSource={record.items}
-                        columns={subcolumns}
-                        pagination={false}
+        <div>
+            <div style={{display:"flex", margin:"10px auto"}}>
+                <Input placeholder="搜索书名"
+                       onChange={handleChange}
+                       className="mySearch"
+                       style={{margin:"6px 0", width:"400px", borderRadius:"10px 0 0 10px", padding:"0 10px",height:"40px"}}
+                       allowClear
+                />
+                <Button onClick={onSearch} type="primary" style={{margin:"6px 20px 6px 0px ", padding:"10px", borderRadius:"0 10px 10px 0",height:"40px"}}><SearchOutlined/></Button>
+                <RangePicker onChange={onDateChange} format="YYYY-MM-DD" style={{margin:"6px"}}/>
+            </div>
+
+            <Table
+                dataSource={orderList}
+                columns={columns}
+                rowKey="orderid"
+                expandable={{
+                    expandedRowRender:(record)=>(
+                        <Table
+                            dataSource={record.items}
+                            columns={subcolumns}
+                            pagination={false}
                         />
-                ),
-                rowExpandable:()=>true,
-                expandedRowKeys:expandedRows,
-                onExpand: handleRowExpand,
-            }}
-        />
+                    ),
+                    rowExpandable:()=>true,
+                    expandedRowKeys:expandedRows,
+                    onExpand: handleRowExpand,
+                }}
+            />
+        </div>
+
+
+
     );
 }
 

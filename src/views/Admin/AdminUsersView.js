@@ -113,14 +113,14 @@ const AdminUsersView = () => {
     },]);
     return (
         <div className="content"
-             style={{background: colorBgContainer, padding:"30px"}}
+             style={{background: colorBgContainer, padding:"30px", color:"#000"}}
         >
-            <h1>管理用户</h1>
-            <h2>普通用户</h2>
+            <h2>管理用户</h2>
+            <h1>普通用户</h1>
             <Table dataSource={userList} columns={userColumns} rowKey="userid" />
-            <h2>已封禁</h2>
+            <h1>已封禁</h1>
             <Table dataSource={banList} columns={banColumns} rowKey="userid" />
-            <h2>管理员</h2>
+            <h1>管理员</h1>
             <Table dataSource={adminList} columns={adminColumns} rowKey="userid" />
         </div>
     );

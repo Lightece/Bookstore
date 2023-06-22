@@ -9,6 +9,10 @@ const LoginView = ({ onLogin }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if(userid === '' || password === ''){
+            message.error("用户名或密码不能为空！");
+            return;
+        }
         const res = await login(userid, password);
 
         if (res.ok) {

@@ -108,5 +108,19 @@ async function getUserList(type) {
         });
 }
 
+async function getUserBuy(startDate, endDate) {
+    const userid = localStorage.getItem("userid");
+    const token = localStorage.getItem("token");
+    return await fetch("http://localhost:8080/getUserBuy", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({userid,token, startDate, endDate}),
+    }).then((data) => {
+        return data.json();
+    });
+}
 
-export {  login, checkUserState, getUserInfo, checkAdmin, setUserStatus, getUserList };
+
+export {  login, checkUserState, getUserInfo, checkAdmin, setUserStatus, getUserList, getUserBuy };

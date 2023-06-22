@@ -1,23 +1,3 @@
-async function getOrders(){
-    const userid = localStorage.getItem("userid");
-    const token = localStorage.getItem('token');
-    const url = "http://localhost:8080/getOrders";
-    console.log("getOrders: " + userid + " " + token);
-    return await fetch(url, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({userid, token})
-    })
-        .then ((data) => {
-            return data.json();
-        })
-        .catch((error) => {
-            console.log(error);
-        })
-}
-
 async function submitOrder({order}){
     return await fetch("http://localhost:8080/submitOrder", {
         method: "POST",
@@ -34,22 +14,24 @@ async function submitOrder({order}){
         })
 }
 
-async function getOrderList(){
+async function getOrderList( isAdmin, keyword, startDate, endDate) {
     const userid = localStorage.getItem("userid");
     const token = localStorage.getItem('token');
-    const url = "http://localhost:8080/getAllOrders";
+    const url = "http://localhost:8080/getOrderList";
     return await fetch(url, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({userid, token})
-    })
-        .then ((data) => {
-            return data.json();
-        })
-        .catch((error) => {
-            console.log(error);
-        })
+        body: JSON.stringify({ userid, token, isAdmin, keyword, startDate, endDate})})
+            .then((data) => {
+                console.log(JSON.stringify({ userid, token, isAdmin, keyword, startDate, endDate}));
+                return data.json();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
 }
-export {getOrders, submitOrder, getOrderList}
+
+
+export {submitOrder, getOrderList}

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import {Table, Button, Modal, Form, Input, InputNumber, message, theme} from "antd";
-import {getBookList, updateBook, addBook, deleteBook, setBookStatus} from "../../services/BookService";
+import {Table, Button, Modal, Form, Input, InputNumber, message, theme, Select} from "antd";
+import {getBookList, updateBook, addBook, deleteBook, setBookStatus, getValidBooks} from "../../services/BookService";
+import {SearchOutlined} from "@ant-design/icons";
 
 const AdminBooksView = () => {
     const [bookList, setBookList] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedBook, setSelectedBook] = useState(null);
+    const [keyword, setKeyword] = useState("");
 
     const [form] = Form.useForm();
 
@@ -22,7 +24,7 @@ const AdminBooksView = () => {
 
 
     useEffect(() => {
-        fetchBookList();
+        fetchBookList().then(() => {});
     }, []);
 
     const showAddModal = () => {
@@ -44,25 +46,30 @@ const AdminBooksView = () => {
 
     const handleSave = async (values) => {
         try {
+            // 将 price 转换为两位小数
+            const formattedPrice = Number(values.price).toFixed(2);
+
             if (selectedBook) {
                 const userid = localStorage.getItem("userid");
                 const token = localStorage.getItem("token");
-                await updateBook({ ...selectedBook, ...values }, userid, token);
+                await updateBook({ ...selectedBook, ...values, price: formattedPrice }, userid, token);
                 message.success("Book updated successfully");
                 setSelectedBook(null);
             } else {
                 const userid = localStorage.getItem("userid");
                 const token = localStorage.getItem("token");
-                await addBook(values, userid, token);
+                await addBook({ ...values, price: formattedPrice }, userid, token);
                 message.success("Book added successfully");
             }
             setIsModalVisible(false);
-            fetchBookList();
+
+            fetchBookList().then(() => {});
         } catch (error) {
             console.log("Error saving book:", error);
             message.error("Failed to save book");
         }
     };
+
 
     const handleStatus = async (book,status) => {
         try {
@@ -134,12 +141,31 @@ const AdminBooksView = () => {
         },
     ];
 
+    const handleChange = (e) => {
+        setKeyword(e.target.value);
+    };
+
+    const onSearch = async () => {
+        // console.log(keyword);
+        getBookList(keyword).then((res) => {
+            setBookList(res.data);
+        });
+    };
+
     return (
         <div className="content"
              style={{background: colorBgContainer, padding:"30px"}}
         >
             <h1>管理书籍</h1>
-
+            <div style={{display:"flex", margin:"10px auto"}}>
+                <Input placeholder="搜索书名"
+                       onChange={handleChange}
+                       className="mySearch"
+                       style={{margin:"6px 0", width:"600px", borderRadius:"10px 0 0 10px", padding:"0 10px",height:"40px"}}
+                       allowClear
+                />
+                <Button onClick={onSearch} type="primary" style={{margin:"6px 0", padding:"10px", borderRadius:"0 10px 10px 0",height:"40px"}}><SearchOutlined/></Button>
+            </div>
             <Button type="primary" onClick={showAddModal}>
                 Add Book
             </Button>
@@ -182,7 +208,7 @@ const AdminBooksView = () => {
                         label="价格"
                         rules={[{ required: true, message: "Please enter the book price" }]}
                     >
-                        <InputNumber />
+                        <InputNumber step="0.01"/>
                     </Form.Item>
                     <Form.Item
                         name="stock"

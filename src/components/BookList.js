@@ -1,12 +1,11 @@
 import React, {useEffect} from 'react';
 import {List, Input, Select, Button} from 'antd'
 import BookCard from './BookCard';
-import {getBookList, getValidBooks} from "../services/BookService";
+import {getValidBooks} from "../services/BookService";
 import '../css/HomeView.css';
 import {SearchOutlined} from "@ant-design/icons";
 
 const BookList = () => {
-    const {Search} = Input;
     const { Option } = Select;
     const [books, setBooks] = React.useState([]);
     const [selectSearchType, setSelectSearchType] = React.useState("title");
