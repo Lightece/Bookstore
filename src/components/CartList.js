@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {getCart, buy, updateQuantity, deleteFromCart} from "../services/CartService";
 import {Button, InputNumber, Table, Modal, Input, message} from "antd";
+import {waitOrderInfo} from "../utils/WebSocket";
 
 const columns=[
     {
@@ -120,18 +121,26 @@ const CartList = () =>{
         setSelectedRowKeys([]);
     };
 
+    const handleOrderInfo = (data) => {
+        if(data.ok){
+            alert("订单已处理:",data.data);
+        }
+    }
+
     // onclick buy button, send the selected books to the backend and refresh the page
     const buyNow= async()=>{
         if(await buy(items, receiver,phone, address)){
             // console.log("buy success");
             window.location.reload();
-            messageApi.success("购买成功！");
+            messageApi.success("订单已提交！");
             setItems([]);
             setConfirm("是否确认购买以下书籍：\n");
             setSelectedRowKeys([]);
+            // create websocket connection
+            waitOrderInfo(sessionStorage.getItem("userid"),handleOrderInfo);
         }
         else {
-            messageApi.error("购买失败，请重试。");
+            messageApi.error("订单提交失败，请重试。");
         }
     };
 

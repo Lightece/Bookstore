@@ -1,4 +1,15 @@
 
+function getCookie(name) {
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+        const [cookieName, cookieValue] = cookie.split('=');
+        if (cookieName.trim() === name) {
+            return decodeURIComponent(cookieValue);
+        }
+    }
+    return null;
+}
+
 async function login(userid, password) {
     const url = "http://localhost:8080/login";
     return await fetch(url, {
@@ -6,7 +17,39 @@ async function login(userid, password) {
         headers: {
             "Content-Type": "application/json"
         },
+        credentials: 'include',
         body: JSON.stringify({userid, password})
+    })
+        .then(res => {
+            if (res.ok) {
+                return res.json();
+            } else return null;
+        });
+}
+
+async function logout() {
+    const url = "http://localhost:8080/logout";
+    return await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: 'include'
+    })
+        .then(res => {
+            if (res.ok) {
+                return res.json();
+            } else return null;
+        });
+}
+async function register(userid, password, nickname, tel, address, email, avatar) {
+    const url = "http://localhost:8080/register";
+    return await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({userid, password, nickname, tel, address, email, avatar})
     })
         .then(res => {
             if (res.ok) {
@@ -123,4 +166,4 @@ async function getUserBuy(startDate, endDate) {
 }
 
 
-export {  login, checkUserState, getUserInfo, checkAdmin, setUserStatus, getUserList, getUserBuy };
+export {  login, checkUserState, getUserInfo, checkAdmin, setUserStatus, getUserList, getUserBuy, register, logout };

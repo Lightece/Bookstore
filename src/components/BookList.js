@@ -23,20 +23,15 @@ const BookList = () => {
         console.log(value);
         getValidBooks(selectSearchType, value).then((res) => {
             setBooks(res.data);
-            console.log(res.data);
         });
     };
 
-
     const handleChange = (e) => {
         setValue(e.target.value);
-        console.log(value);
     };
     const selectChange = (newValue) => {
-        // console.log(newValue);
         setSelectSearchType(newValue);
     }
-
 
     return (
       <div>

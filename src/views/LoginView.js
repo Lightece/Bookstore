@@ -1,10 +1,10 @@
 import React, { useState} from 'react';
 import { login} from "../services/UserService";
-import {message} from "antd";
+import {Button, message} from "antd";
 import "../css/LoginView.css";
 
-const LoginView = ({ onLogin }) => {
-    const [userid, setUsername] = useState('');
+const LoginView = () => {
+    const [userid, setUserid] = useState('');
     const [password, setPassword] = useState('');
 
     const handleSubmit = async (e) => {
@@ -14,12 +14,13 @@ const LoginView = ({ onLogin }) => {
             return;
         }
         const res = await login(userid, password);
-
         if (res.ok) {
-            const token = res.data.token;
-            localStorage.setItem('token', token);
-            localStorage.setItem('userid', userid);
-            onLogin(userid);
+            message.success("登录成功！");
+            // console.log(res.data);
+            sessionStorage.setItem("userid", res.data.userid);
+            sessionStorage.setItem("nickname", res.data.nickname);
+            sessionStorage.setItem("avatar", res.data.avatar);
+            window.location.href = "/";
         } else {
             message.error(res.message);
         }
@@ -28,7 +29,6 @@ const LoginView = ({ onLogin }) => {
     return (
         <div>
             <div style={{display:"flex"}}>
-                {/*<span className="site-title">闲   书</span>*/}
                 <img src="http://myimg.lightece.top/bookstore/assets/logo.png" alt="logo" style={{margin:"0px auto",width:"300px"}}/>
             </div>
 
@@ -39,7 +39,7 @@ const LoginView = ({ onLogin }) => {
                     type="text"
                     placeholder="UserID"
                     value={userid}
-                    onChange={(e) => setUsername(e.target.value)}
+                    onChange={(e) => setUserid(e.target.value)}
                 />
                 <input
                     type="password"
@@ -48,6 +48,7 @@ const LoginView = ({ onLogin }) => {
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 <button type="submit">登录</button>
+                <Button type="link" href="/register">注册</Button>
             </form>
         </div>
         </div>

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import '../css/Basic.css';
 import {Button, Layout, Menu} from 'antd';
 import UserRoute from "../Routers/UserRoute";
-import {getUserInfo} from "../services/UserService";
+import {getUserInfo, login, logout} from "../services/UserService";
 
 const { Header, Footer } = Layout;
 
@@ -28,31 +28,19 @@ const nav_items = [
 
 
 const BasicView = () => {
-    // const [current, setCurrent] = useState('home');
-    // const onClick = (e) => {
-    //     console.log('click ', e);
-    //     setCurrent(e.key);
-    // };
-    const [user, setUser] = useState(null);
-    useEffect(() => {
-        const userid = localStorage.getItem("userid");
-        const token = localStorage.getItem("token");
-        console.log(userid, token);
-        console.log(user);
-        if(userid === null || token === null){
-            setUser(null);
-        }
-        else getUserInfo(userid, token).then((res)=>{
-                setUser(res.data);
-            }
-        );
-    },[]);
-
-    const logout= () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("userid");
-        setUser({});
-        window.location.href = "/";
+    const [userid, setUserid] = useState(sessionStorage.getItem("userid"));
+    const [nickname, setNickname] = useState(sessionStorage.getItem("nickname"));
+    const [avatar, setAvatar] = useState(sessionStorage.getItem("avatar"));
+    const logOut= async() => {
+        const res = await logout();
+        console.log(res);
+        sessionStorage.removeItem("userid");
+        sessionStorage.removeItem("nickname");
+        sessionStorage.removeItem("avatar");
+        setUserid(null);
+        setNickname(null);
+        setAvatar(null);
+        // window.location.href = "/";
     }
 
     const gotoProfile = () => {
@@ -63,7 +51,7 @@ const BasicView = () => {
         <Header left="0">
             <div className="logo" />
             <div style={{ float: 'right' }}>
-                {user==null?(
+                {userid==null?(
                     <div>
                         <span style={{ marginRight: 20 }}>当前为游客模式浏览</span>
                         <Button>
@@ -73,9 +61,9 @@ const BasicView = () => {
                 ):(
                     <div style={{display:"block", alignItems:"center"}}>
                         <div style={{display:"flex"}}>
-                            <img src={user.avatar} alt="user" className="smallAvatar" alt="个人中心" style={{ margin:"auto 10px"}} onClick={gotoProfile}/>
-                            <span style={{ margin:"auto 10px" }}>{"欢迎您，"+user.nickname+"!"}</span>
-                            <Button  size="middle" onClick={logout} style={{margin:"auto 20px"} }>
+                            <img src={avatar} alt="user" className="smallAvatar" alt="个人中心" style={{ margin:"auto 10px"}} onClick={gotoProfile}/>
+                            <span style={{ margin:"auto 10px" }}>{"欢迎您，"+nickname+"!"}</span>
+                            <Button  size="middle" onClick={logOut} style={{margin:"auto 20px"} }>
                                 登出
                             </Button>
                         </div>
